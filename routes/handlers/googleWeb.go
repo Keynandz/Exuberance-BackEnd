@@ -26,8 +26,8 @@ func GoogleCallbackWeb(c echo.Context) error {
 		log.Fatal("error loading file .env")
 	}
 
-	formatWeb := "http://%s:%s"
-	formatRedirect := "http://%s:%s/connection/exuberance/google/callback"
+	formatWeb := "http://%s.nip.io:%s"
+	formatRedirect := "http://%s.nip.io:%s/connection/exuberance/google/callback"
 
 	redirectUrl := fmt.Sprintf(formatRedirect, os.Getenv("SERVER_ADDRESS"), os.Getenv("SERVER_PORT"))
 	webUrl := fmt.Sprintf(formatWeb, os.Getenv("WEB_HOST"), os.Getenv("WEB_PORT"))

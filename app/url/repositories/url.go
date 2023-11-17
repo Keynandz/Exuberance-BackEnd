@@ -5,24 +5,16 @@ import (
 	"exuberance-backend/models"
 	"exuberance-backend/pkg/database"
 	"fmt"
-	"net"
-	"net/url"
 	"time"
 )
 
 func SaveUrl(url models.StatusResponse) error {
 	db := database.GetDB()
 
-	ipAddress, err := getIPAddress(url.URL)
-	if err != nil {
-		return fmt.Errorf("error getting IP address: %w", err)
-	}
-
 	postUrl := models.LogUrl{
-		Created:   time.Now(),
-		Url:       url.URL,
-		IpAddress: ipAddress,
-		Status:    url.Disposition,
+		Created: time.Now(),
+		Url:     url.URL,
+		Status:  url.Disposition,
 	}
 
 	result := db.Create(&postUrl)
@@ -48,22 +40,4 @@ func GetUrl() ([]dto.GetUrl, error) {
 	}
 
 	return getUrl, nil
-}
-
-func getIPAddress(urlString string) (string, error) {
-	parsedURL, err := url.Parse(urlString)
-	if err != nil {
-		return "", fmt.Errorf("error parsing URL: %w", err)
-	}
-
-	ips, err := net.LookupIP(parsedURL.Hostname())
-	if err != nil {
-		return "", fmt.Errorf("error looking up IP: %w", err)
-	}
-
-	if len(ips) > 0 {
-		return ips[0].String(), nil
-	}
-
-	return "", fmt.Errorf("no IP address found for URL")
 }
